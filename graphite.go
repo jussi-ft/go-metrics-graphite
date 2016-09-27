@@ -27,6 +27,7 @@ type GraphiteConfig struct {
 // to a graphite server located at addr, flushing them every d duration
 // and prepending metric names with prefix.
 func Graphite(r metrics.Registry, d time.Duration, prefix string, addr *net.TCPAddr) {
+    log.Printf("Func Graphite in package graphite called")
 	GraphiteWithConfig(GraphiteConfig{
 		Addr:          addr,
 		Registry:      r,
@@ -59,7 +60,10 @@ func graphite(c *GraphiteConfig) error {
 	du := float64(c.DurationUnit)
 	conn, err := net.DialTCP("tcp", nil, c.Addr)
 	if nil != err {
+        log.Printf("Error %v while attempting to connect to %v", err, c.Addr)
 		return err
+	} else {
+        log.Printf("Connection to %v established successfully", c.Addr)
 	}
 	defer conn.Close()
 	w := bufio.NewWriter(conn)
